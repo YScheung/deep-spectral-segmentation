@@ -12,6 +12,7 @@ from skimage.morphology import binary_dilation, binary_erosion
 from torch.utils.data import Dataset
 from torchvision import transforms
 from tqdm import tqdm
+import random
 
 
 class ImagesDataset(Dataset):
@@ -211,3 +212,22 @@ def get_diagonal(W: scipy.sparse.csr_matrix, threshold: float = 1e-12):
     D[D < threshold] = 1.0  # Prevent division by zero.
     D = scipy.sparse.diags(D)
     return D
+
+
+def colored_output(filename, num_categories):
+    img = cv2.imread(filename)
+    colors = [[random.randint(0,255),random.randint(0,255), random.randint(0,255)] for i in range (num_categories)]
+    
+    listcol = []
+    for i in img:
+        for j in i:
+            if j.tolist() not in listcol:
+                listcol.append(j.tolist())
+
+    for col in range(len(listcol)):
+        for i in range(len(img)):
+            for j in range(len(img[i])):
+                if (img[i][j] == np.array(listcol[col])).all():
+                    img[i][j] = colors[col]
+
+    cv2.imwrite(filename,img)
