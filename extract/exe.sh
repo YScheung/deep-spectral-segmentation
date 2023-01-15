@@ -56,3 +56,5 @@ python extract.py extract_semantic_segmentations \
     --segmentations_dir "./data/${DATASET}/multi_region_segmentation/${MATRIX}" \
     --bbox_clusters_file "./data/${DATASET}/multi_region_bboxes/${MATRIX}/bbox_clusters.pth" \
     --output_dir "./data/${DATASET}/semantic_segmentations/patches/${MATRIX}/segmaps" 
+    
+    /Users/yaushingjonathancheung/Desktop/deep-spectral-segmentation/extract/data/VOC2012/semantic_segmentations/patches/laplacian/segmaps

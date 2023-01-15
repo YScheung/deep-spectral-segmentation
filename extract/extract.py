@@ -17,6 +17,7 @@ from tqdm import tqdm
 
 import extract_utils as utils
 
+mode = 'cpu'
 
 def extract_features(
     images_list: str,
@@ -143,8 +144,10 @@ def _extract_eig(
         return  # skip because already generated
 
     # Load affinity matrix
-    #feats = data_dict[which_features].squeeze().cuda() 
-    feats = data_dict[which_features].squeeze().cpu() # CPU compatible
+    if mode == 'cuda':
+        feats = data_dict[which_features].squeeze().cuda() 
+    else:
+        feats = data_dict[which_features].squeeze().cpu() # CPU compatible
     if normalize:
         feats = F.normalize(feats, p=2, dim=-1)
 
@@ -523,7 +526,7 @@ def extract_bbox_features(
     model_name_lower = model_name.lower()
     model, val_transform, patch_size, num_heads = utils.get_model(model_name_lower)
     #model.eval().to('cuda')
-    model.eval().to('cpu') #CPU compatible
+    model.eval().to(mode) #CPU compatible
 
     # Loop over boxes
     for bbox_dict in tqdm(bbox_list):
@@ -534,7 +537,7 @@ def extract_bbox_features(
         image_filename = str(Path(images_root) / f'{image_id}.jpg')
         image = val_transform(Image.open(image_filename).convert('RGB'))  # (3, H, W)
         #image = image.unsqueeze(0).to('cuda')  # (1, 3, H, W)
-        image = image.unsqueeze(0).to('cpu') #CPU compatible
+        image = image.unsqueeze(0).to(mode) #CPU compatible
         features_crops = []
         for (xmin, ymin, xmax, ymax) in bboxes:
             image_crop = image[:, :, ymin:ymax, xmin:xmax]
