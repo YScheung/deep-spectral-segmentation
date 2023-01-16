@@ -70,6 +70,7 @@ class VOCSegmentationWithPseudolabelsBase(VisionDataset):
             download_and_extract_archive(self.url, self.root, filename=self.filename, md5=self.md5)
 
         if not os.path.isdir(voc_root):
+            print("VOC ROOT", voc_root)
             raise RuntimeError("Dataset not found or corrupted. You can use download=True to download it")
 
         splits_dir = os.path.join(voc_root, "ImageSets", self._SPLITS_DIR)

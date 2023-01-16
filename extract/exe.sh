@@ -6,7 +6,7 @@ DOWNSAMPLE=16
 N_SEG=10
 N_ERODE=2
 N_DILATE=5
-
+'''
 # Feature Extraction
 python3 extract.py extract_features \
     --images_list "./data/VOC2012/lists/images.txt" \
@@ -56,5 +56,9 @@ python extract.py extract_semantic_segmentations \
     --segmentations_dir "./data/${DATASET}/multi_region_segmentation/${MATRIX}" \
     --bbox_clusters_file "./data/${DATASET}/multi_region_bboxes/${MATRIX}/bbox_clusters.pth" \
     --output_dir "./data/${DATASET}/semantic_segmentations/patches/${MATRIX}/segmaps" 
-    
-    /Users/yaushingjonathancheung/Desktop/deep-spectral-segmentation/extract/data/VOC2012/semantic_segmentations/patches/laplacian/segmaps
+'''
+python extract.py extract_crf_segmentations \
+    --images_list "./data/VOC2012/lists/images.txt" \
+    --images_root "./data/VOC2012/images" \
+    --segmentations_dir "./data/${DATASET}/multi_region_segmentation/${MATRIX}"  \
+    --output_dir "./data/${DATASET}/semantic_segmentations/patches/${MATRIX}/crf-segmaps" \
