@@ -649,7 +649,6 @@ def extract_semantic_segmentations(
         # Save
         output_file = str(Path(output_dir) / f'{image_id}.png')
         Image.fromarray(semantic_segmap.astype(np.uint8)).convert('L').save(output_file)
-        utils.colored_output(output_file,5)
     
     print(f'Saved features to {output_dir}')
 
@@ -667,10 +666,11 @@ def _extract_crf_segmentations(
     # Output file
     id = Path(image_file).stem
     output_file = str(Path(output_dir) / f'{id}.png')
+    
     if Path(output_file).is_file():
         print(f'Skipping existing file {str(output_file)}')
         return  # skip because already generated
-
+    
     # Load image and segmap
     image_file = str(Path(images_root) / f'{id}.jpg')
     image = np.array(Image.open(image_file).convert('RGB'))  # (H_patch, W_patch, 3)
@@ -687,16 +687,18 @@ def _extract_crf_segmentations(
     segmap_orig_res = cv2.resize(segmap, dsize=(W, H), interpolation=cv2.INTER_NEAREST)  # (H, W)
     segmap_orig_res[:H_pad, :W_pad] = segmap_upscaled  # replace with the correctly upscaled version, just in case they are different
 
+    
     # Convert binary
     if set(np.unique(segmap_orig_res).tolist()) == {0, 255}:
         segmap_orig_res[segmap_orig_res == 255] = 1
-
+    
     # CRF
     import denseCRF  # make sure you've installed SimpleCRF
     unary_potentials = F.one_hot(torch.from_numpy(segmap_orig_res).long(), num_classes=num_classes)
     segmap_crf = denseCRF.densecrf(image, unary_potentials, crf_params)  # (H_pad, W_pad)
 
     # Save
+    #segmap_crf = (segmap_crf * 255).astype(np.uint8)
     Image.fromarray(segmap_crf).convert('L').save(output_file)
 
 

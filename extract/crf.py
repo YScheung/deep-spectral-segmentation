@@ -22,6 +22,7 @@ BGR_MEAN = np.array([104.008, 116.669, 122.675])
 def dense_crf(image_tensor: torch.FloatTensor, output_logits: torch.FloatTensor):
     image = np.array(VF.to_pil_image(unnorm(image_tensor)))[:, :, ::-1]
     H, W = image.shape[:2]
+
     image = np.ascontiguousarray(image)
 
     output_logits = F.interpolate(output_logits.unsqueeze(0), size=(H, W), mode="bilinear",

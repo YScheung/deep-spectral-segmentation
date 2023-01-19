@@ -50,15 +50,15 @@ python extract.py extract_bbox_features \
 python extract.py extract_bbox_clusters \
     --bbox_features_file "./data/${DATASET}/multi_region_bboxes/${MATRIX}/bbox_features.pth" \
     --output_file "./data/${DATASET}/multi_region_bboxes/${MATRIX}/bbox_clusters.pth" 
-
+'''
 # Create semantic segmentations
 python extract.py extract_semantic_segmentations \
     --segmentations_dir "./data/${DATASET}/multi_region_segmentation/${MATRIX}" \
     --bbox_clusters_file "./data/${DATASET}/multi_region_bboxes/${MATRIX}/bbox_clusters.pth" \
     --output_dir "./data/${DATASET}/semantic_segmentations/patches/${MATRIX}/segmaps" 
-'''
+
 python extract.py extract_crf_segmentations \
     --images_list "./data/VOC2012/lists/images.txt" \
     --images_root "./data/VOC2012/images" \
-    --segmentations_dir "./data/${DATASET}/multi_region_segmentation/${MATRIX}"  \
+    --segmentations_dir "./data/${DATASET}/semantic_segmentations/patches/${MATRIX}/segmaps"  \
     --output_dir "./data/${DATASET}/semantic_segmentations/patches/${MATRIX}/crf-segmaps" \
